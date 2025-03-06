@@ -43,14 +43,14 @@ class MainApp(App):
         return GUI
 
     def on_start(self):
-        LabelBase.register(name='myraid_pro_reg',fn_regular ='MYRIADPRO-REGULAR.OTF')
-        LabelBase.register(name= 'd_din_reg',fn_regular = 'd-din.regular.ttf')
-        LabelBase.register(name= 'bistecca',fn_regular = 'Bistecca.ttf')
-        LabelBase.register(name= 'teko-reg',fn_regular = 'Teko-Regular.ttf')
-        LabelBase.register(name= 'barlow-reg',fn_regular = 'BarlowSemiCondensed-Regular.ttf')
-        LabelBase.register(name= 'barlow-bold',fn_regular = 'BarlowSemiCondensed-SemiBold.ttf')
-        LabelBase.register(name= 'roboto-medium',fn_regular = 'Roboto-Medium.ttf')
-        LabelBase.register(name= 'roboto-thin',fn_regular = 'Roboto-Thin.ttf')
+        LabelBase.register(name='myraid_pro_reg',fn_regular ='fonts/MYRIADPRO-REGULAR.OTF')
+        LabelBase.register(name= 'd_din_reg',fn_regular = 'fonts/d-din.regular.ttf')
+        LabelBase.register(name= 'bistecca',fn_regular = 'fonts/Bistecca.ttf')
+        LabelBase.register(name= 'teko-reg',fn_regular = 'fonts/Teko-Regular.ttf')
+        LabelBase.register(name= 'barlow-reg',fn_regular = 'fonts/BarlowSemiCondensed-Regular.ttf')
+        LabelBase.register(name= 'barlow-bold',fn_regular = 'fonts/BarlowSemiCondensed-SemiBold.ttf')
+        LabelBase.register(name= 'roboto-medium',fn_regular = 'fonts/Roboto-Medium.ttf')
+        LabelBase.register(name= 'roboto-thin',fn_regular = 'fonts/Roboto-Thin.ttf')
 
     def process_signup(self):
         pass

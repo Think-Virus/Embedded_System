@@ -14,7 +14,7 @@ import serial.tools.list_ports
 
 import kivy.utils as utils
 
-Window.borderless = True
+Window.borderless = True # Hide the basic button to minimize, maximize and close screen functions
 
 #seperator is to create space and line in a floatlayout
 class Separator(FloatLayout):

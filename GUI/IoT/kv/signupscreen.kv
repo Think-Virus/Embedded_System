@@ -16,7 +16,8 @@
         size_hint: (None,None)
         height: "25dp"
         width: "30dp"
-        pos :  1115,863 #was 1115, 863  1675, 1140
+        # pos :  1115,863 #was 1115, 863  1675, 1140
+        pos_hint: {"right": 0.96, "top": 0.99}
         on_release: app.minimize()
 
     ImageButton:
@@ -25,7 +26,8 @@
         size_hint: (None,None)
         height: "25dp"
         width: "30dp"
-        pos :  1160,865 #(this is x (width) and y height) 1160,865 ,1730,1160
+        # pos :  1160,865 #(this is x (width) and y height) 1160,865 ,1730,1160
+        pos_hint: {"right": 0.99, "top": 0.99}
         on_release: app.close()
 
     BoxLayout:

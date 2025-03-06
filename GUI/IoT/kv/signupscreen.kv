@@ -111,7 +111,7 @@
                 pos_hint :{'right' : 0.15}
                 size_hint : (0.1,0.4)
             TextInput:
-                hint_text: "Cheng"  #initialize; this is not hard coded name on the screen
+                hint_text: "Choi"  #initialize; this is not hard coded name on the screen
                 font_size: "12sp"
                 font_name :'barlow-reg'
                 pos_hint : {'right': 0.89}
@@ -134,17 +134,71 @@
 #-----------------End of name row----------------------
 
 #-----------------Start of email row----------------------
+        BoxLayout:
+            size_hint : (1,0.15)
+            orientation: "vertical"
+            Label:
+                text: "EMAIL"
+                font_size : "12sp"
+                font_name : 'barlow-reg'
+                pos_hint :{'right' : 0.15}
+                size_hint : (0.1,0.4)
+            TextInput:
+                hint_text: "choim3419@uwstout.edu"
+                font_size: "12sp"
+                font_name :'barlow-reg'
+                pos_hint : {'right': 0.89}
+                size_hint: (0.85,0.4)
+                background_color : 0,0,0,0
+                foreground_color: 0.8,0.8,0.8,1
 
-
-
-
-
+            Separator:
+                width : "240dp"
+                size_hint : (0.85,0.01)
+                pos_hint : {'right': 0.91}
+                canvas:
+                    Color:
+                        rgba: utils.get_color_from_hex("#2a2f44")
+                    Rectangle:
+                        size : self.size
+                        pos : self.pos
+            Spacer:
+                size_hint : (0.1,0.19)
 #-----------------End of email row----------------------
+
 #-----------------Start of password row----------------------
+        BoxLayout:
+            size_hint : (1,0.15)
+            orientation: "vertical"
+            Label:
+                text: "PASSWORD"
+                font_size : "12sp"
+                font_name : 'barlow-reg'
+                pos_hint :{'right' : 0.19}
+                size_hint : (0.1,0.4)
 
+            TextInput:
+                password : True
+                hint_text: "**************"
+                font_size: "12sp"
+                font_name :'barlow-reg'
+                pos_hint : {'right': 0.89}
+                size_hint: (0.85,0.4)
+                background_color : 0,0,0,0
+                foreground_color: 0.8,0.8,0.8,1
 
-
-
+            Separator:
+                width : "240dp"
+                size_hint : (0.85,0.01)
+                pos_hint : {'right': 0.91}
+                canvas:
+                    Color:
+                        rgba: utils.get_color_from_hex("#2a2f44")
+                    Rectangle:
+                        size : self.size
+                        pos : self.pos
+            Spacer:
+                size_hint : (0.1,0.19)
 #-----------------End of password row----------------------
 
 
@@ -181,10 +235,9 @@
                         pos : self.pos
             Spacer:
                 size_hint : (0.1,0.19)
-
 #-----------------End of confirm password row----------------------
-#-----------------Start of terms and conditions row----------------------
 
+#-----------------Start of terms and conditions row----------------------
         BoxLayout:
             size_hint: (1,0.05)
             orientation : "horizontal"

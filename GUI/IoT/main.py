@@ -32,6 +32,9 @@ class LabelButton(ButtonBehavior,Label):
 class SignupScreen(Screen):
     pass
 
+class LoginScreen(Screen):
+    pass
+
 GUI =  Builder.load_file("main.kv")
 
 Config.set('graphics', 'width','1200')
@@ -53,7 +56,10 @@ class MainApp(App):
         LabelBase.register(name= 'roboto-thin',fn_regular = 'fonts/Roboto-Thin.ttf')
 
     def process_signup(self):
-        pass
+        GUI.current = "signup_screen"
+
+    def process_login(self):
+        GUI.current = "login_screen"
 
     def close(self):
         quit()

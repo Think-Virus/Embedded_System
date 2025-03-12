@@ -1,0 +1,20 @@
+#: include kv/signupscreen.kv
+#: include kv/loginscreen.kv
+#: include kv/dashboardscreen.kv
+
+
+ScreenManager:
+    id: screen_manager
+    size: 1,1
+
+    DashboardScreen:
+        name : "dashboard_screen"
+        id : dashboard_screen
+
+    SignupScreen:
+        name : "signup_screen"
+        id : signup_screen
+
+    LoginScreen:
+        name : "login_screen"
+        id : login_screen

@@ -1,0 +1,410 @@
+#: import utils kivy.utils
+
+<DashboardScreen>:
+    BoxLayout: # Background
+        orientation: "vertical"
+        canvas:
+            Color:
+                rgba: utils.get_color_from_hex('#b3cedc')
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        BoxLayout: # top bar (minimizing and closing button)
+            orientation: "horizontal"
+            size_hint: (1,0.03)
+            spacing: "10"
+            canvas:
+                Color:
+                    rgba: utils.get_color_from_hex('#bb15ee')
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            Spacer:
+                size_hint: (0.75,1)
+            ImageButton:
+                id: minimize_btn_id
+                source: "icons/line.png"
+                size_hint: (None, None)
+                height: "25dp"
+                width: "35dp"
+                pos_hint: {"center_y": 0.48}
+                on_release:
+                    app.minimize()
+            ImageButton:
+                id: close_btn_id
+                source: "icons/close.png"
+                size_hint: (None, None)
+                height: "18dp"
+                pos_hint: {"center_y": 0.5}
+                on_release:
+                    app.close()
+            Spacer:
+                size_hint: (0.01, 1)
+
+        Spacer:
+            size_hint: (1, 0.04)
+
+        BoxLayout: # Data area
+            orientation: "vertical"
+            size_hint: (0.98, 0.90)
+            pos_hint: {"right": 0.99}
+
+            BoxLayout: # temperature, map, cloud area
+                orientation: "horizontal"
+                size_hint: (1,0.35)
+                spacing: "4"
+                canvas:
+                    Color:
+                        rgba: utils.get_color_from_hex('#0b172e')
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+                BoxLayout: # Temperature
+                    orientation: "vertical"
+                    size_hint: (0.35, 1)
+                    canvas:
+                        Color:
+                            rgba: utils.get_color_from_hex('#1b203e')
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    Label:
+                        text: "Temperature"
+                        size_hint: (1, 0.1)
+                        pos_hint: {"right": 0.65}
+                        color: utils.get_color_from_hex("#f26a21")
+                    Image:
+                        id: temp_sensor_img_id
+                        source: "icons/7.png"
+                        size_hint: (0.6, 0.6)
+                        pos_hint: {"right": 0.8}
+                    Label:
+                        id: temp_sensor_label_id
+                        text: "75C"
+                        font_size: "35sp"
+                        color: 0.0039, 0.4392, 0.984, 1
+                        font_name: 'barlow-bold'
+                        size_hint: (1, 0.3)
+
+                BoxLayout: # map
+                    orientation: "vertical"
+                    size_hint: (0.35, 1)
+
+                    Image:
+                        source: "icons/map.jpg"
+                        size_hint: (1,1)
+                        allow_stretch: True
+                        keep_ratio: False
+
+                BoxLayout: # cloud 1
+                    orientation: "vertical"
+                    size_hint: (0.15, 1)
+                    canvas:
+                        Color:
+                            rgba: utils.get_color_from_hex('#1b203e')
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    Label:
+                        text: "Cloud 1"
+                        size_hint: (1, 0.1)
+                        pos_hint: {"right": 0.8}
+                        color: utils.get_color_from_hex('#f26a21')
+                    Label:
+                        text: "78"
+                        size_hint: (1, 0.8)
+                        font_size: "85sp"
+                        font_name: 'barlow-bold'
+                        color: 0.0039, 0.4392, 0.984, 1
+                    Label:
+                        text: "14:00"
+                        size_hint: (1, 0.1)
+                        color: utils.get_color_from_hex('#f26a21')
+
+                BoxLayout: # cloud 2
+                    orientation: "vertical"
+                    size_hint: (0.15, 1)
+                    canvas:
+                        Color:
+                            rgba: utils.get_color_from_hex('#1b203e')
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    Label:
+                        text: "Cloud 2"
+                        size_hint: (1, 0.1)
+                        pos_hint: {"right": 0.8}
+                        color: utils.get_color_from_hex('#f26a21')
+                    Label:
+                        text: "78"
+                        size_hint: (1, 0.8)
+                        font_size: "85sp"
+                        font_name: 'barlow-bold'
+                        color: 0.0039, 0.4392, 0.984, 1
+                    Label:
+                        text: "14:00"
+                        size_hint: (1, 0.1)
+                        color: utils.get_color_from_hex('#f26a21')
+
+            Spacer:
+                size_hint: (1, 0.01)
+
+            BoxLayout: # Description, Batteries
+                orientation: "horizontal"
+                size_hint: (1,0.32)
+                spacing: "3"
+                canvas:
+                    Color:
+                        rgba: utils.get_color_from_hex('#0b172e')
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+                BoxLayout: # Description
+                    orientation: "vertical"
+                    size_hint: (0.7, 1)
+                    canvas:
+                        Color:
+                            rgba: utils.get_color_from_hex('#1b203e')
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    Spacer:
+                        size_hint: (1, 0.05)
+                    Label:
+                        text: "Description"
+                        size_hint: (1, 0.05)
+                        pos_hint: {"right": 0.57}
+                        color: utils.get_color_from_hex("#f26a21")
+                    Spacer:
+                        size_hint: (1, 0.9)
+
+                BoxLayout: # Batteries area
+                    orientation: "horizontal"
+                    size_hint: (0.3, 1)
+                    canvas:
+                        Color:
+                            rgba: utils.get_color_from_hex('#1b203e')
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+
+                    BoxLayout: # Battery 1
+                        orientation: "vertical"
+                        size_hint: (0.49, 0.9)
+                        Label:
+                            text: "Battery 1"
+                            size_hint: (1, 0.1)
+                            color: utils.get_color_from_hex("#f26a21")
+                            font_name: 'barlow-bold'
+                        Image:
+                            id: bat1_img_id
+                            source: "icons/bat1.png"
+                            size_hint: (0.8, 0.9)
+                            pos_hint: {"right": 0.9}
+
+                    Separator:
+                        size_hint: (0.01, 1)
+                        canvas:
+                            Color:
+                                rgba: utils.get_color_from_hex('#0b172e')
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+
+                    BoxLayout: # Battery 2
+                        orientation: "vertical"
+                        size_hint: (0.49, 0.9)
+                        Label:
+                            text: "Battery 2"
+                            size_hint: (1, 0.1)
+                            color: utils.get_color_from_hex("#f26a21")
+                            font_name: 'barlow-bold'
+                        Image:
+                            id: bat1_img_id
+                            source: "icons/bat2.png"
+                            size_hint: (0.8, 0.9)
+                            pos_hint: {"right": 0.9}
+
+            Spacer:
+                size_hint: (1, 0.01)
+
+            BoxLayout: # Valve Controls and Power Switches
+                orientation: "horizontal"
+                size_hint: (1, 0.28)
+                spacing: "3"
+                canvas:
+                    Color:
+                        rgba: utils.get_color_from_hex('#1b203e')
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+                BoxLayout: # Valve control area
+                    orientation: "vertical"
+                    size_hint: (0.698, 1)
+                    canvas:
+                        Color:
+                            rgba: utils.get_color_from_hex('#1b203e')
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    Spacer:
+                        size_hint: (1, 0.05)
+                    Label:
+                        text: "Valve Controls"
+                        size_hint: (0.15, 0.05)
+                        color: utils.get_color_from_hex('#f26a21')
+                        pos_hint: {"right": 0.16}
+
+                    BoxLayout:
+                        orientation: "horizontal"
+                        size_hint: (1, 0.9)
+
+                        BoxLayout: # valve controller 1
+                            orientation: "vertical"
+                            size_hint: (0.2, 1)
+                            Slider:
+                                size_hint: (1, 0.7)
+                                orientation: "vertical"
+                                value_Track: True
+                                value_track_color: 0.0039, 0.4392, 0.984, 1
+                                value: 50
+                                size_hint_y: 1
+                                min: 0
+                                max: 100
+                            Label:
+                                text: "v1"
+                                size_hint: (1, 0.3)
+                                color: utils.get_color_from_hex('#f26a21')
+
+                        BoxLayout: # valve controller 2
+                            orientation: "vertical"
+                            size_hint: (0.2, 1)
+                            Slider:
+                                size_hint: (1, 0.7)
+                                orientation: "vertical"
+                                value_Track: True
+                                value_track_color: 0.0039, 0.4392, 0.984, 1
+                                value: 50
+                                size_hint_y: 1
+                                min: 0
+                                max: 100
+                            Label:
+                                text: "v2"
+                                size_hint: (1, 0.3)
+                                color: utils.get_color_from_hex('#f26a21')
+
+                        BoxLayout: # valve controller 3
+                            orientation: "vertical"
+                            size_hint: (0.2, 1)
+                            Slider:
+                                size_hint: (1, 0.7)
+                                orientation: "vertical"
+                                value_Track: True
+                                value_track_color: 0.0039, 0.4392, 0.984, 1
+                                value: 50
+                                size_hint_y: 1
+                                min: 0
+                                max: 100
+                            Label:
+                                text: "v3"
+                                size_hint: (1, 0.3)
+                                color: utils.get_color_from_hex('#f26a21')
+
+                        BoxLayout: # valve controller 4
+                            orientation: "vertical"
+                            size_hint: (0.2, 1)
+                            Slider:
+                                size_hint: (1, 0.7)
+                                orientation: "vertical"
+                                value_Track: True
+                                value_track_color: 0.0039, 0.4392, 0.984, 1
+                                value: 50
+                                size_hint_y: 1
+                                min: 0
+                                max: 100
+                            Label:
+                                text: "v4"
+                                size_hint: (1, 0.3)
+                                color: utils.get_color_from_hex('#f26a21')
+
+                        BoxLayout: # valve controller 5
+                            orientation: "vertical"
+                            size_hint: (0.2, 1)
+                            Slider:
+                                size_hint: (1, 0.7)
+                                orientation: "vertical"
+                                value_Track: True
+                                value_track_color: 0.0039, 0.4392, 0.984, 1
+                                value: 50
+                                size_hint_y: 1
+                                min: 0
+                                max: 100
+                            Label:
+                                text: "v5"
+                                size_hint: (1, 0.3)
+                                color: utils.get_color_from_hex('#f26a21')
+
+                Separator:
+                    size_hint: (0.002, 1)
+                    canvas:
+                        Color:
+                            rgba: utils.get_color_from_hex('#0b172e')
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+
+                BoxLayout: # Power Button 1
+                    orientation: "vertical"
+                    size_hint: (0.15, 1)
+                    canvas:
+                        Color:
+                            rgba: utils.get_color_from_hex('#1b203e')
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    Label:
+                        text: "Switch 1"
+                        size_hint: (1, 0.1)
+                        pos_hint: {"right": 0.8}
+                        color: utils.get_color_from_hex('#f26a21')
+                    ImageButton:
+                        source: "icons/switchoff.png"
+                        size_hint: (1, 0.8)
+                        id: switch_1_id
+                        on_release: app.process_switch1()
+                    Label:
+                        text: "OFF"
+                        id: switch_1_label_id
+                        size_hint: (1, 0.1)
+                        font_name: 'barlow-bold'
+                        color: utils.get_color_from_hex('#f26a21')
+
+                BoxLayout: # Power Button 2
+                    orientation: "vertical"
+                    size_hint: (0.15, 1)
+                    canvas:
+                        Color:
+                            rgba: utils.get_color_from_hex('#1b203e')
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    Label:
+                        text: "Switch 2"
+                        size_hint: (1, 0.1)
+                        pos_hint: {"right": 0.8}
+                        color: utils.get_color_from_hex('#f26a21')
+                    ImageButton:
+                        source: "icons/switchoff.png"
+                        size_hint: (1, 0.8)
+                        id: switch_2_id
+                        on_release: app.process_switch2()
+                    Label:
+                        text: "OFF"
+                        id: switch_2_label_id
+                        size_hint: (1, 0.1)
+                        font_name: 'barlow-bold'
+                        color: utils.get_color_from_hex('#f26a21')

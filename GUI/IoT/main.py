@@ -1,5 +1,7 @@
 from threading import Thread
 import traceback
+import json
+import requests
 
 import serial.tools.list_ports
 from kivy.app import App
@@ -88,7 +90,15 @@ class MainApp(App):
         LabelBase.register(name='roboto-medium', fn_regular='fonts/Roboto-Medium.ttf')
         LabelBase.register(name='roboto-thin', fn_regular='fonts/Roboto-Thin.ttf')
 
-        self.thread_init()
+        # self.thread_init()
+
+        # Get data from database
+        result = requests.get("https://iotdashboard-ffb97-default-rtdb.firebaseio.com/1.json")
+        print("Success ?", result.ok)
+        data = json.loads(result.content.decode())
+        print(data)
+        temperature_ = data['temperature']
+        print(temperature_)
 
     @staticmethod
     def get_port():

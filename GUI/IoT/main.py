@@ -114,13 +114,14 @@ class MainApp(App):
             self.root.ids['signup_screen'].ids['error_label_id'].text = error_message
             self.root.ids['signup_screen'].ids['error_label_id'].color = get_color_from_hex('#ff0000')
         else:
+            realtime_database_url = "https://iotdashboard-ffb97-default-rtdb.firebaseio.com/"
+
             refresh_toke = sign_up_data['refreshToken']
             self.local_id = sign_up_data['localId']
             self.id_token = sign_up_data['idToken']
 
             device_data = '{"battery": 0, "battery1": 0, "cloud1": 0, "cloud2": 0, "pressure": 0, "switch1": 0, "switch2": 0, "temperature": 0}'
-            requests.patch("https://iotdashboard-ffb97-default-rtdb.firebaseio.com/" + self.local_id + ".json?auth=" + self.id_token,
-                           data=device_data)
+            requests.patch(realtime_database_url + self.local_id + ".json?auth=" + self.id_token, data=device_data)
 
     @staticmethod
     def get_port():
@@ -136,10 +137,25 @@ class MainApp(App):
         except serial.SerialException as e:
             print(traceback.format_exc())
         Clock.schedule_interval(self.update_dashboard_ui, 1)
+        Clock.schedule_interval(self.update_firebase, 1)
 
         self.main_thread = Thread(target=self.get_sensor_data)
         self.main_thread.daemon = True
         self.main_thread.start()
+
+    def update_firebase(self):
+        realtime_database_url = "https://iotdashboard-ffb97-default-rtdb.firebaseio.com/"
+        device_data = {
+            "battery": int(self.bat1_val / 52),  # 예시: 배터리 퍼센트를 0~10으로 환산
+            "battery1": int(self.bat2_val / 52),
+            "cloud1": self.cloud_src1_val,
+            "cloud2": self.cloud_src2_val,
+            "pressure": self.pressure_sensor_val,
+            "switch1": self.switch1_val,
+            "switch2": self.switch2_val,
+            "temperature": int(self.temp_sensor_val / 50)
+        }
+        requests.patch(realtime_database_url + self.local_id + ".json?auth=" + self.id_token, data=json.dumps(device_data))
 
     def get_sensor_data(self):
         while True:

@@ -1,8 +1,8 @@
-from threading import Thread
-import traceback
 import json
-import requests
+import traceback
+from threading import Thread
 
+import requests
 import serial.tools.list_ports
 from kivy.app import App
 from kivy.clock import Clock
@@ -58,6 +58,12 @@ Config.write()
 
 
 class MainApp(App):
+    # Firebase
+    wak = 'AIzaSyDLkkzgHf0dulDOIzfWTWhziBnYIgRxxjw'
+    local_id = ""
+    id_token = ""
+
+    # STM Board
     iot_device = None
 
     temp_sensor_val = 0
@@ -90,15 +96,31 @@ class MainApp(App):
         LabelBase.register(name='roboto-medium', fn_regular='fonts/Roboto-Medium.ttf')
         LabelBase.register(name='roboto-thin', fn_regular='fonts/Roboto-Thin.ttf')
 
-        # self.thread_init()
+    def process_sign_up(self):
+        self.sign_up(self.root.ids['signup_screen'].ids['sign_up_email_id'].text, self.root.ids['signup_screen'].ids['sign_up_password_id'].text)
 
-        # Get data from database
-        result = requests.get("https://iotdashboard-ffb97-default-rtdb.firebaseio.com/1.json")
-        print("Success ?", result.ok)
-        data = json.loads(result.content.decode())
-        print(data)
-        temperature_ = data['temperature']
-        print(temperature_)
+    def sign_up(self, email, password):
+        sign_up_url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + self.wak
+        sign_up_payload = {"email": email, "password": password, "returnSecureToken": True}
+        sign_up_request = requests.post(sign_up_url, data=sign_up_payload)
+
+        print(sign_up_request.ok)
+        print(sign_up_request.content.decode('utf-8'))
+
+        sign_up_data = json.loads(sign_up_request.content.decode('utf-8'))
+        if not sign_up_request.ok:
+            error_data = json.loads(sign_up_request.content.decode('utf-8'))
+            error_message = error_data['error']['message']
+            self.root.ids['signup_screen'].ids['error_label_id'].text = error_message
+            self.root.ids['signup_screen'].ids['error_label_id'].color = get_color_from_hex('#ff0000')
+        else:
+            refresh_toke = sign_up_data['refreshToken']
+            self.local_id = sign_up_data['localId']
+            self.id_token = sign_up_data['idToken']
+
+            device_data = '{"battery": 0, "battery1": 0, "cloud1": 0, "cloud2": 0, "pressure": 0, "switch1": 0, "switch2": 0, "temperature": 0}'
+            requests.patch("https://iotdashboard-ffb97-default-rtdb.firebaseio.com/" + self.local_id + ".json?auth=" + self.id_token,
+                           data=device_data)
 
     @staticmethod
     def get_port():

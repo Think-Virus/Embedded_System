@@ -47,7 +47,8 @@ class LoginScreen(Screen):
 
 
 class DashboardScreen(Screen):
-    pass
+    def on_enter(self):
+        App.get_running_app().thread_init()
 
 
 GUI = Builder.load_file("main.kv")
@@ -123,6 +124,8 @@ class MainApp(App):
             device_data = '{"battery": 0, "battery1": 0, "cloud1": 0, "cloud2": 0, "pressure": 0, "switch1": 0, "switch2": 0, "temperature": 0}'
             requests.patch(realtime_database_url + self.local_id + ".json?auth=" + self.id_token, data=device_data)
 
+            self.process_dashboard()
+
     @staticmethod
     def get_port():
         ports = list(serial.tools.list_ports.comports())
@@ -143,7 +146,7 @@ class MainApp(App):
         self.main_thread.daemon = True
         self.main_thread.start()
 
-    def update_firebase(self):
+    def update_firebase(self, arg):
         realtime_database_url = "https://iotdashboard-ffb97-default-rtdb.firebaseio.com/"
         device_data = {
             "battery": int(self.bat1_val / 52),  # 예시: 배터리 퍼센트를 0~10으로 환산
@@ -276,6 +279,9 @@ class MainApp(App):
         except Exception as e:
             print(traceback.format_exc())
             pass
+
+    def process_dashboard(self):
+        GUI.current = "dashboard_screen"
 
     def process_signup(self):
         GUI.current = "signup_screen"

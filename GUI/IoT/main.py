@@ -238,12 +238,12 @@ class MainApp(App):
             pass
 
     def process_switch1(self):
-        if self.switch1_val:
+        if not self.switch1_val:
             self.root.ids['dashboard_screen'].ids['switch_1_id'].source = "icons/switchon.png"
             self.root.ids['dashboard_screen'].ids['switch_1_label_id'].text = "ON"
             self.root.ids['dashboard_screen'].ids['switch_1_label_id'].color = get_color_from_hex('#f26a21')
 
-            self.switch1_val = 0
+            self.switch1_val = 1
             self.send_data("A1")
             print("Switch 1 toggled ON")
         else:
@@ -251,17 +251,17 @@ class MainApp(App):
             self.root.ids['dashboard_screen'].ids['switch_1_label_id'].text = "OFF"
             self.root.ids['dashboard_screen'].ids['switch_1_label_id'].color = get_color_from_hex('#0b172e')
 
-            self.switch1_val = 1
+            self.switch1_val = 0
             self.send_data("A0")
             print("Switch 1 toggled OFF")
 
     def process_switch2(self):
-        if self.switch2_val:
+        if not self.switch2_val:
             self.root.ids['dashboard_screen'].ids['switch_2_id'].source = "icons/switchon.png"
             self.root.ids['dashboard_screen'].ids['switch_2_label_id'].text = "ON"
             self.root.ids['dashboard_screen'].ids['switch_2_label_id'].color = get_color_from_hex('#f26a21')
 
-            self.switch2_val = 0
+            self.switch2_val = 1
             self.send_data("B1")
             print("Switch 2 toggled ON")
         else:
@@ -269,7 +269,7 @@ class MainApp(App):
             self.root.ids['dashboard_screen'].ids['switch_2_label_id'].text = "OFF"
             self.root.ids['dashboard_screen'].ids['switch_2_label_id'].color = get_color_from_hex('#0b172e')
 
-            self.switch2_val = 1
+            self.switch2_val = 0
             self.send_data("B0")
             print("Switch 2 toggled OFF")
 

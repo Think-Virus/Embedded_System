@@ -142,6 +142,7 @@
                 pos_hint :{'right' : 0.15}
                 size_hint : (0.1,0.4)
             TextInput:
+                id : sign_up_email_id
                 hint_text: "choim3419@uwstout.edu"
                 font_size: "12sp"
                 font_name :'barlow-reg'
@@ -176,6 +177,7 @@
                 size_hint : (0.1,0.4)
 
             TextInput:
+                id : sign_up_password_id
                 password : True
                 hint_text: "**************"
                 font_size: "12sp"
@@ -277,7 +279,7 @@
                 font_size : "12sp"
                 font_name : 'barlow-reg'
                 on_release:
-                    #process signup
+                    app.process_sign_up()
             LabelButton:
                 text: "Already a member ? [u]Login here.[/u]"
                 color : 0.4039,0.4156,0.545,1

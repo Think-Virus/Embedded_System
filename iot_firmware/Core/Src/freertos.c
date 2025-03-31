@@ -136,58 +136,82 @@ void StartDefaultTask(void const * argument)
   /* USER CODE END StartDefaultTask */
 }
 
-/* USER CODE BEGIN Header_Tread1Func */
-/**
-* @brief Function implementing the Tread1 thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_Tread1Func */
+
 void Tread1Func(void const * argument)
 {
-//	uint8_t message[30] = "Greeting from Thread 1 \r\n";
   for(;;)
   {
-//	  Thread1_Profiler++;
-//	  HAL_UART_Transmit(&huart2, message, 30, 1000);
+	  Thread1_Profiler++;
+	  xSemaphoreTake(tx_mutexHandle, portMAX_DELAY);
 
-//    osDelay(1);
+	  // Test 1
+	  uart_outchar('A');
+	  uart_outdec(sensorValues[0]); // Temperature sensor at PA4 (ADC1_IN4)
+	  uart_outcrfl();
 
-	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
-	  osDelay(500);
-//	  uart_send_data('S', 1200);
-//	  osDelay(1);
+	  uart_outchar('B');
+	  uart_outdec(sensorValues[1]); // Pressure sensor at PA5 (ADC1_IN5)
+	  uart_outcrfl();
+
+	  uart_outchar('C');
+	  uart_outdec(sensorValues[2]); // Battery 1 at PA6 (ADC1_IN6)
+	  uart_outcrfl();
+
+	  uart_outchar('D');
+	  uart_outdec(sensorValues[3]); // Battery 2 at PA7 (ADC1_IN7)
+	  uart_outcrfl();
+
+
+	  xSemaphoreGive(tx_mutexHandle);
+
+	  osDelay(1);
   }
-  /* USER CODE END Tread1Func */
 }
 
-/* USER CODE BEGIN Header_Tread2Func */
-/**
-* @brief Function implementing the Tread2 thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_Tread2Func */
+uint8_t recv[2]; // Receiving data
+
 void Tread2Func(void const * argument)
 {
-//	uint8_t message[30] = "Greeting from Thread 2 \r\n";
-  /* USER CODE BEGIN Tread2Func */
-  /* Infinite loop */
+
   for(;;)
   {
-//	  Thread2_Profiler++;
+	  Thread2_Profiler++;
 
-//	  buttonStatus = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
-//	  HAL_UART_Transmit(&huart2, message, 30, 1000);
-//    osDelay(1);
+	  xSemaphoreTake(tx_mutexHandle, portMAX_DELAY);
 
-	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
-	  osDelay(600);
+	  HAL_UART_Receive(&huart2, recv, 4, 1000);
+
+	  if (recv[0] == 65)
+	  {
+		  if (recv[1] == 49)
+		  {
+			  HAL_GPIO_WritePin(OUTPUT1_GPIO_Port, OUTPUT1_Pin, GPIO_PIN_SET);
+		  }
+		  else
+		  {
+			  HAL_GPIO_WritePin(OUTPUT1_GPIO_Port, OUTPUT1_Pin, GPIO_PIN_RESET);
+		  }
+
+	  }
+
+	  if (recv[0] == 66)
+	  {
+		  if (recv[1] == 49)
+		  {
+			  HAL_GPIO_WritePin(OUTPUT2_GPIO_Port, OUTPUT2_Pin, GPIO_PIN_SET);
+		  }
+		  else
+		  {
+			  HAL_GPIO_WritePin(OUTPUT2_GPIO_Port, OUTPUT2_Pin, GPIO_PIN_RESET);
+		  }
+
+	  }
+
+	  xSemaphoreGive(tx_mutexHandle);
+
+	  buttonStatus = HAL_GPIO_ReadPin(BTN1_GPIO_Port, BTN1_Pin);
+
+	  osDelay(1);
+
   }
-  /* USER CODE END Tread2Func */
 }
-
-/* Private application code --------------------------------------------------*/
-/* USER CODE BEGIN Application */
-
-/* USER CODE END Application */

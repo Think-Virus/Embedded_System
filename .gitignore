@@ -161,5 +161,6 @@ cython_debug/
 .idea/
 
 iot_firmware/Debug/
+iot_firmware/.settings/
 GUI/IoT/fonts
 

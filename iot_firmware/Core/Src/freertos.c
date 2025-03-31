@@ -153,10 +153,10 @@ void Tread1Func(void const * argument)
 
 //    osDelay(1);
 
-//	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
-//	  osDelay(500);
-	  uart_send_data('S', 1200);
-	  osDelay(1);
+	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
+	  osDelay(500);
+//	  uart_send_data('S', 1200);
+//	  osDelay(1);
   }
   /* USER CODE END Tread1Func */
 }
@@ -181,8 +181,7 @@ void Tread2Func(void const * argument)
 //	  HAL_UART_Transmit(&huart2, message, 30, 1000);
 //    osDelay(1);
 
-	  //HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
-	  HAL_GPIO_TogglePin(GPIOB, OUTPUT4_Pin);
+	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
 	  osDelay(600);
   }
   /* USER CODE END Tread2Func */

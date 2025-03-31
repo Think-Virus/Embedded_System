@@ -15,6 +15,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen
+from kivy.uix.textinput import TextInput
 from kivy.utils import get_color_from_hex
 
 Window.borderless = True  # Hide the basic button to minimize, maximize and close screen functions
@@ -38,11 +39,61 @@ class LabelButton(ButtonBehavior, Label):
     pass
 
 
+class ComfortableTextInput(TextInput):
+    def keyboard_on_key_down(self, window, keycode, text, modifiers):
+        if keycode[1] == 'tab':
+            parent = self.parent
+            while parent:
+                if isinstance(parent, Screen):
+                    break
+                parent = parent.parent
+
+            if parent.name == 'signup_screen':
+                if parent and parent.name == 'signup_screen':
+                    ids = parent.ids
+                    if self == ids.get('sign_up_name_id'):
+                        ids.sign_up_email_id.focus = True
+                        return True
+                    elif self == ids.get('sign_up_email_id'):
+                        ids.sign_up_password_id.focus = True
+                        return True
+                    elif self == ids.get('sign_up_password_id'):
+                        ids.sign_up_password_confirm_id.focus = True
+                        return True
+                    elif self == ids.get('sign_up_password_confirm_id'):
+                        ids.sign_up_name_id.focus = True  # loop
+                        return True
+            elif parent.name == 'signin_screen':
+                ids = parent.ids
+                if self == ids.get('sign_in_email_id'):
+                    ids.sign_in_password_id.focus = True
+                    return True
+                elif self == ids.get('sign_in_password_id'):
+                    ids.sign_in_email_id.focus = True
+                    return True
+
+        if keycode[1] == 'enter':
+            parent = self.parent
+            while parent:
+                if isinstance(parent, Screen):
+                    break
+                parent = parent.parent
+
+            if parent.name == 'signup_screen':
+                App.get_running_app().process_sign_up()
+                return True
+            elif parent.name == 'signin_screen':
+                App.get_running_app().process_sign_in()
+                return True
+
+        return super().keyboard_on_key_down(window, keycode, text, modifiers)
+
+
 class SignupScreen(Screen):
     pass
 
 
-class LoginScreen(Screen):
+class SigninScreen(Screen):
     pass
 
 
@@ -97,10 +148,49 @@ class MainApp(App):
         LabelBase.register(name='roboto-medium', fn_regular='fonts/Roboto-Medium.ttf')
         LabelBase.register(name='roboto-thin', fn_regular='fonts/Roboto-Thin.ttf')
 
+    def process_sign_in(self):
+        self.sign_in(self.root.ids['signin_screen'].ids['sign_in_email_id'].text, self.root.ids['signin_screen'].ids['sign_in_password_id'].text)
+
+    def sign_in(self, email, password):
+        # Input validation
+        if not email or not password:
+            self.root.ids['signin_screen'].ids['sign_in_error_label_id'].text = "Please enter both email and password"
+            return
+
+        # Firebase signin endpoint
+        signin_url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + self.wak
+        signin_payload = {
+            "email": email,
+            "password": password,
+            "returnSecureToken": True
+        }
+
+        signin_request = requests.post(signin_url, data=signin_payload)
+        signin_data = json.loads(signin_request.content.decode('utf-8'))
+
+        if not signin_request.ok:
+            error_message = signin_data.get('error', {}).get('message', 'Signin failed')
+            self.root.ids['signin_screen'].ids['sign_in_error_label_id'].text = error_message
+            return
+
+        # Signin success
+        refresh_token = signin_data['refreshToken']
+        self.local_id = signin_data['localId']
+        self.id_token = signin_data['idToken']
+
+        print("Signin successful")
+        print("Local ID:", self.local_id)
+
+        self.process_move2dashboard()
+
     def process_sign_up(self):
         self.sign_up(self.root.ids['signup_screen'].ids['sign_up_email_id'].text, self.root.ids['signup_screen'].ids['sign_up_password_id'].text)
 
     def sign_up(self, email, password):
+        # Check a validation
+        if not self.validate_signup():
+            return
+
         sign_up_url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + self.wak
         sign_up_payload = {"email": email, "password": password, "returnSecureToken": True}
         sign_up_request = requests.post(sign_up_url, data=sign_up_payload)
@@ -110,10 +200,8 @@ class MainApp(App):
 
         sign_up_data = json.loads(sign_up_request.content.decode('utf-8'))
         if not sign_up_request.ok:
-            error_data = json.loads(sign_up_request.content.decode('utf-8'))
-            error_message = error_data['error']['message']
-            self.root.ids['signup_screen'].ids['error_label_id'].text = error_message
-            self.root.ids['signup_screen'].ids['error_label_id'].color = get_color_from_hex('#ff0000')
+            error_message = sign_up_data['error']['message']
+            self.root.ids['signup_screen'].ids['sign_up_error_label_id'].text = error_message
         else:
             realtime_database_url = "https://iotdashboard-ffb97-default-rtdb.firebaseio.com/"
 
@@ -124,7 +212,45 @@ class MainApp(App):
             device_data = '{"battery": 0, "battery1": 0, "cloud1": 0, "cloud2": 0, "pressure": 0, "switch1": 0, "switch2": 0, "temperature": 0}'
             requests.patch(realtime_database_url + self.local_id + ".json?auth=" + self.id_token, data=device_data)
 
-            self.process_dashboard()
+            self.process_move2dashboard()
+
+    def validate_signup(self):
+        # Access the signup screen's ids
+        signup_ids = self.root.ids['signup_screen'].ids
+
+        name = signup_ids['sign_up_name_id'].text.strip()
+        email = signup_ids['sign_up_email_id'].text.strip()
+        password = signup_ids['sign_up_password_id'].text.strip()
+        confirm_password = signup_ids['sign_up_password_confirm_id'].text.strip()
+        checkbox = signup_ids['terms_n_conditions_cb_id']
+        error_label = signup_ids['sign_up_error_label_id']
+
+        # Name validation
+        if not name:
+            error_label.text = "Please enter the name"
+            return False
+        # Email validation
+        if not email:
+            error_label.text = "Please enter the email"
+            return False
+        # Password validation
+        if not password:
+            error_label.text = "Please enter the password"
+            return False
+        # Confirm password validation
+        if not confirm_password:
+            error_label.text = "Please enter the password confirmation"
+            return False
+        # Passwords match check
+        if password != confirm_password:
+            error_label.text = "Passwords do not match"
+            return False
+        # Terms and conditions checkbox
+        if not checkbox.active:
+            error_label.text = "Please agree to the terms and conditions"
+            return
+
+        return True
 
     @staticmethod
     def get_port():
@@ -280,14 +406,14 @@ class MainApp(App):
             print(traceback.format_exc())
             pass
 
-    def process_dashboard(self):
+    def process_move2dashboard(self):
         GUI.current = "dashboard_screen"
 
-    def process_signup(self):
+    def process_move2signup(self):
         GUI.current = "signup_screen"
 
-    def process_login(self):
-        GUI.current = "login_screen"
+    def process_move2signin(self):
+        GUI.current = "signin_screen"
 
     def close(self):
         quit()

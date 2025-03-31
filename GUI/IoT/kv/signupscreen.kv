@@ -81,12 +81,12 @@
                 size_hint:(0.5,0.7)#0.5 is width of a blank space
             Button:
                 size_hint: (0.15,0.5)
-                text: "LOG IN"
+                text: "SIGN IN"
                 font_size: "12sp"
                 font_name : 'barlow-reg'
                 background_normal : ''
                 background_color : 0.027,0.180,0.380,1
-                on_release: app.process_login()
+                on_release: app.process_move2signin()
             Button:
                 size_hint: (0.15,0.5)
                 text: "SIGN UP"
@@ -94,7 +94,7 @@
                 font_name : 'barlow-reg'
                 background_normal : ''
                 background_color : 0.0039,0.4392,0.984,1
-                on_release: app.process_signup()
+                on_release: app.process_move2signup()
             Spacer:
                 size_hint:(0.2,1)
 
@@ -108,8 +108,9 @@
                 font_name : 'barlow-reg'
                 pos_hint :{'right' : 0.15}
                 size_hint : (0.1,0.4)
-            TextInput:
-                hint_text: "Choi"  #initialize; this is not hard coded name on the screen
+            ComfortableTextInput:
+                hint_text: "Myunggyun"  #initialize; this is not hard coded name on the screen
+                id : sign_up_name_id
                 font_size: "12sp"
                 font_name :'barlow-reg'
                 pos_hint : {'right': 0.89}
@@ -141,7 +142,7 @@
                 font_name : 'barlow-reg'
                 pos_hint :{'right' : 0.15}
                 size_hint : (0.1,0.4)
-            TextInput:
+            ComfortableTextInput:
                 id : sign_up_email_id
                 hint_text: "choim3419@uwstout.edu"
                 font_size: "12sp"
@@ -176,7 +177,7 @@
                 pos_hint :{'right' : 0.19}
                 size_hint : (0.1,0.4)
 
-            TextInput:
+            ComfortableTextInput:
                 id : sign_up_password_id
                 password : True
                 hint_text: "**************"
@@ -213,7 +214,8 @@
                 pos_hint :{'right' : 0.25}
                 size_hint : (0.1,0.4)
 
-            TextInput:
+            ComfortableTextInput:
+                id : sign_up_password_confirm_id
                 password : True
                 hint_text: "**************"
                 font_size: "12sp"
@@ -243,9 +245,9 @@
             orientation : "horizontal"
 
             CheckBox:
-                id: CheckBox
+                id: terms_n_conditions_cb_id
                 active : False
-                color : 0.0039, 0.4392,0.984,1
+                color : 1,1,1,1
                 size_hint : (0.2,1)
 
             LabelButton:
@@ -261,8 +263,25 @@
             Spacer:
                 size_hint:(0.2,1)
 #-----------------End of terms and conditions row----------------------
-        Spacer:
-            size_hint:(1,0.05)
+
+#-----------------Start of Error row----------------------
+        BoxLayout:
+            size_hint: (1,0.2)
+            orientation : "horizontal"
+
+            Label:
+                id : sign_up_error_label_id
+                text : ''
+                font_size :  "13sp"
+                halign : 'left'
+                pos_hint : {'right' : 0.89}
+                markup : True
+                size_hint: (0.6,1)
+                color: 1,0,0,1
+            Spacer:
+                size_hint:(0.2,1)
+#-----------------End of Error row----------------------
+
 #-----------------Start of last row----------------------
 
         BoxLayout:
@@ -281,12 +300,12 @@
                 on_release:
                     app.process_sign_up()
             LabelButton:
-                text: "Already a member ? [u]Login here.[/u]"
+                text: "Already a member ? [u]Signin here.[/u]"
                 color : 0.4039,0.4156,0.545,1
                 markup: True
                 font_size : "13sp"
                 size_hint : (0.7,0.5)
-                on_release: app.process_login()
+                on_release: app.process_move2signin()
 
 
 #-----------------End of last row----------------------

@@ -181,22 +181,30 @@ void Tread2Func(void const * argument)
 
 	  HAL_UART_Receive(&huart2, recv, 4, 1000);
 
-	  if (recv[0] == 65 && recv[1] == 49)
+	  if (recv[0] == 65)
 	  {
-		  HAL_GPIO_WritePin(OUTPUT1_GPIO_Port, OUTPUT1_Pin, GPIO_PIN_SET);
-	  }
-	  else if (recv[0] == 65)
-	  {
-		  HAL_GPIO_WritePin(OUTPUT1_GPIO_Port, OUTPUT1_Pin, GPIO_PIN_RESET);
+		  if (recv[1] == 49)
+		  {
+			  HAL_GPIO_WritePin(OUTPUT1_GPIO_Port, OUTPUT1_Pin, GPIO_PIN_SET);
+		  }
+		  else
+		  {
+			  HAL_GPIO_WritePin(OUTPUT1_GPIO_Port, OUTPUT1_Pin, GPIO_PIN_RESET);
+		  }
+
 	  }
 
-	  if (recv[0] == 66 && recv[1] == 49)
-	  	  {
-	  		  HAL_GPIO_WritePin(OUTPUT2_GPIO_Port, OUTPUT2_Pin, GPIO_PIN_SET);
-	  	  }
-	  else if(recv[0] == 66)
+	  if (recv[0] == 66)
 	  {
-		  HAL_GPIO_WritePin(OUTPUT2_GPIO_Port, OUTPUT2_Pin, GPIO_PIN_RESET);
+		  if (recv[1] == 49)
+		  {
+			  HAL_GPIO_WritePin(OUTPUT2_GPIO_Port, OUTPUT2_Pin, GPIO_PIN_SET);
+		  }
+		  else
+		  {
+			  HAL_GPIO_WritePin(OUTPUT2_GPIO_Port, OUTPUT2_Pin, GPIO_PIN_RESET);
+		  }
+
 	  }
 
 	  xSemaphoreGive(tx_mutexHandle);

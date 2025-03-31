@@ -72,6 +72,20 @@ class ComfortableTextInput(TextInput):
                     ids.sign_in_email_id.focus = True
                     return True
 
+        if keycode[1] == 'enter':
+            parent = self.parent
+            while parent:
+                if isinstance(parent, Screen):
+                    break
+                parent = parent.parent
+
+            if parent.name == 'signup_screen':
+                App.get_running_app().process_sign_up()
+                return True
+            elif parent.name == 'signin_screen':
+                App.get_running_app().process_sign_in()
+                return True
+
         return super().keyboard_on_key_down(window, keycode, text, modifiers)
 
 

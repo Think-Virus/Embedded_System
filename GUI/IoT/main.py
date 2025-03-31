@@ -138,6 +138,10 @@ class MainApp(App):
         self.sign_up(self.root.ids['signup_screen'].ids['sign_up_email_id'].text, self.root.ids['signup_screen'].ids['sign_up_password_id'].text)
 
     def sign_up(self, email, password):
+        # Check a validation
+        if not self.validate_signup():
+            return
+
         sign_up_url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + self.wak
         sign_up_payload = {"email": email, "password": password, "returnSecureToken": True}
         sign_up_request = requests.post(sign_up_url, data=sign_up_payload)
@@ -150,7 +154,6 @@ class MainApp(App):
             error_data = json.loads(sign_up_request.content.decode('utf-8'))
             error_message = error_data['error']['message']
             self.root.ids['signup_screen'].ids['error_label_id'].text = error_message
-            self.root.ids['signup_screen'].ids['error_label_id'].color = get_color_from_hex('#ff0000')
         else:
             realtime_database_url = "https://iotdashboard-ffb97-default-rtdb.firebaseio.com/"
 
@@ -162,6 +165,44 @@ class MainApp(App):
             requests.patch(realtime_database_url + self.local_id + ".json?auth=" + self.id_token, data=device_data)
 
             self.process_dashboard()
+
+    def validate_signup(self):
+        # Access the signup screen's ids
+        signup_ids = self.root.ids['signup_screen'].ids
+
+        name = signup_ids['sign_up_name_id'].text.strip()
+        email = signup_ids['sign_up_email_id'].text.strip()
+        password = signup_ids['sign_up_password_id'].text.strip()
+        confirm_password = signup_ids['sign_up_password_confirm_id'].text.strip()
+        checkbox = signup_ids['terms_n_conditions_cb_id']
+        error_label = signup_ids['error_label_id']
+
+        # Name validation
+        if not name:
+            error_label.text = "Please enter the name"
+            return False
+        # Email validation
+        if not email:
+            error_label.text = "Please enter the email"
+            return False
+        # Password validation
+        if not password:
+            error_label.text = "Please enter the password"
+            return False
+        # Confirm password validation
+        if not confirm_password:
+            error_label.text = "Please enter the password confirmation"
+            return False
+        # Passwords match check
+        if password != confirm_password:
+            error_label.text = "Passwords do not match"
+            return False
+        # Terms and conditions checkbox
+        if not checkbox.active:
+            error_label.text = "Please agree to the terms and conditions"
+            return
+
+        return True
 
     @staticmethod
     def get_port():

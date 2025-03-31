@@ -109,7 +109,7 @@
                 pos_hint :{'right' : 0.15}
                 size_hint : (0.1,0.4)
             ComfortableTextInput:
-                hint_text: "Choi"  #initialize; this is not hard coded name on the screen
+                hint_text: "Myunggyun"  #initialize; this is not hard coded name on the screen
                 id : sign_up_name_id
                 font_size: "12sp"
                 font_name :'barlow-reg'
@@ -245,9 +245,9 @@
             orientation : "horizontal"
 
             CheckBox:
-                id: CheckBox
+                id: terms_n_conditions_cb_id
                 active : False
-                color : 0.0039, 0.4392,0.984,1
+                color : 1,1,1,1
                 size_hint : (0.2,1)
 
             LabelButton:
@@ -263,8 +263,25 @@
             Spacer:
                 size_hint:(0.2,1)
 #-----------------End of terms and conditions row----------------------
-        Spacer:
-            size_hint:(1,0.05)
+
+#-----------------Start of Error row----------------------
+        BoxLayout:
+            size_hint: (1,0.2)
+            orientation : "horizontal"
+
+            Label:
+                id : error_label_id
+                text : ''
+                font_size :  "13sp"
+                halign : 'left'
+                pos_hint : {'right' : 0.89}
+                markup : True
+                size_hint: (0.6,1)
+                color: 1,0,0,1
+            Spacer:
+                size_hint:(0.2,1)
+#-----------------End of Error row----------------------
+
 #-----------------Start of last row----------------------
 
         BoxLayout:

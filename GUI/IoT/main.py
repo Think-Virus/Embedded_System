@@ -63,7 +63,7 @@ class ComfortableTextInput(TextInput):
                     elif self == ids.get('sign_up_password_confirm_id'):
                         ids.sign_up_name_id.focus = True  # loop
                         return True
-            elif parent.name == 'login_screen':
+            elif parent.name == 'signin_screen':
                 ids = parent.ids
                 if self == ids.get('sign_in_email_id'):
                     ids.sign_in_password_id.focus = True
@@ -79,7 +79,7 @@ class SignupScreen(Screen):
     pass
 
 
-class LoginScreen(Screen):
+class SigninScreen(Screen):
     pass
 
 
@@ -135,39 +135,39 @@ class MainApp(App):
         LabelBase.register(name='roboto-thin', fn_regular='fonts/Roboto-Thin.ttf')
 
     def process_sign_in(self):
-        self.sign_in(self.root.ids['login_screen'].ids['sign_in_email_id'].text, self.root.ids['login_screen'].ids['sign_in_password_id'].text)
+        self.sign_in(self.root.ids['signin_screen'].ids['sign_in_email_id'].text, self.root.ids['signin_screen'].ids['sign_in_password_id'].text)
 
     def sign_in(self, email, password):
         # Input validation
         if not email or not password:
-            self.root.ids['login_screen'].ids['sign_in_error_label_id'].text = "Please enter both email and password"
+            self.root.ids['signin_screen'].ids['sign_in_error_label_id'].text = "Please enter both email and password"
             return
 
-        # Firebase login endpoint
-        login_url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + self.wak
-        login_payload = {
+        # Firebase signin endpoint
+        signin_url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + self.wak
+        signin_payload = {
             "email": email,
             "password": password,
             "returnSecureToken": True
         }
 
-        login_request = requests.post(login_url, data=login_payload)
-        login_data = json.loads(login_request.content.decode('utf-8'))
+        signin_request = requests.post(signin_url, data=signin_payload)
+        signin_data = json.loads(signin_request.content.decode('utf-8'))
 
-        if not login_request.ok:
-            error_message = login_data.get('error', {}).get('message', 'Login failed')
-            self.root.ids['login_screen'].ids['sign_in_error_label_id'].text = error_message
+        if not signin_request.ok:
+            error_message = signin_data.get('error', {}).get('message', 'Signin failed')
+            self.root.ids['signin_screen'].ids['sign_in_error_label_id'].text = error_message
             return
 
-        # Login success
-        refresh_token = login_data['refreshToken']
-        self.local_id = login_data['localId']
-        self.id_token = login_data['idToken']
+        # Signin success
+        refresh_token = signin_data['refreshToken']
+        self.local_id = signin_data['localId']
+        self.id_token = signin_data['idToken']
 
-        print("Login successful")
+        print("Signin successful")
         print("Local ID:", self.local_id)
 
-        self.process_dashboard()
+        self.process_move2dashboard()
 
     def process_sign_up(self):
         self.sign_up(self.root.ids['signup_screen'].ids['sign_up_email_id'].text, self.root.ids['signup_screen'].ids['sign_up_password_id'].text)
@@ -198,7 +198,7 @@ class MainApp(App):
             device_data = '{"battery": 0, "battery1": 0, "cloud1": 0, "cloud2": 0, "pressure": 0, "switch1": 0, "switch2": 0, "temperature": 0}'
             requests.patch(realtime_database_url + self.local_id + ".json?auth=" + self.id_token, data=device_data)
 
-            self.process_dashboard()
+            self.process_move2dashboard()
 
     def validate_signup(self):
         # Access the signup screen's ids
@@ -392,14 +392,14 @@ class MainApp(App):
             print(traceback.format_exc())
             pass
 
-    def process_dashboard(self):
+    def process_move2dashboard(self):
         GUI.current = "dashboard_screen"
 
-    def process_signup(self):
+    def process_move2signup(self):
         GUI.current = "signup_screen"
 
-    def process_login(self):
-        GUI.current = "login_screen"
+    def process_move2signin(self):
+        GUI.current = "signin_screen"
 
     def close(self):
         quit()

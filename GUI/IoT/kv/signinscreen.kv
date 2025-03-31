@@ -1,6 +1,6 @@
 #: import utils kivy.utils
 
-<LoginScreen>:
+<SigninScreen>:
 
     FloatLayout:
         canvas:
@@ -81,13 +81,13 @@
                 size_hint:(0.5,0.7)#0.5 is width of a blank space
             Button:
                 size_hint: (0.15,0.5)
-                text: "LOG IN"
+                text: "SIGN IN"
                 font_size: "12sp"
                 font_name : 'barlow-reg'
                 background_normal : ''
                 background_color : 0.0039,0.4392,0.984,1
                 on_release:
-                    # log in
+                    # sign in
             Button:
                 size_hint: (0.15,0.5)
                 text: "SIGN UP"
@@ -95,7 +95,7 @@
                 font_name : 'barlow-reg'
                 background_normal : ''
                 background_color : 0.027,0.180,0.380,1
-                on_release: app.process_signup()
+                on_release: app.process_move2signup()
             Spacer:
                 size_hint:(0.2,1)
 
@@ -199,7 +199,7 @@
                 size_hint : (0.25,0.6)
                 background_normal :''
                 background_color : 0.0039,0.4392,0.984,1
-                text: "LOG IN"
+                text: "SIGN IN"
                 font_size : "12sp"
                 font_name : 'barlow-reg'
                 on_release:
@@ -210,7 +210,7 @@
                 markup: True
                 font_size : "13sp"
                 size_hint : (0.7,0.5)
-                on_release: app.process_signup()
+                on_release: app.process_move2signup()
 
 
 #-----------------End of last row----------------------

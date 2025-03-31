@@ -15,6 +15,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen
+from kivy.uix.textinput import TextInput
 from kivy.utils import get_color_from_hex
 
 Window.borderless = True  # Hide the basic button to minimize, maximize and close screen functions
@@ -36,6 +37,42 @@ class ImageButton(ButtonBehavior, Image):
 
 class LabelButton(ButtonBehavior, Label):
     pass
+
+
+class ComfortableTextInput(TextInput):
+    def keyboard_on_key_down(self, window, keycode, text, modifiers):
+        if keycode[1] == 'tab':
+            parent = self.parent
+            while parent:
+                if isinstance(parent, Screen):
+                    break
+                parent = parent.parent
+
+            if parent.name == 'signup_screen':
+                if parent and parent.name == 'signup_screen':
+                    ids = parent.ids
+                    if self == ids.get('sign_up_name_id'):
+                        ids.sign_up_email_id.focus = True
+                        return True
+                    elif self == ids.get('sign_up_email_id'):
+                        ids.sign_up_password_id.focus = True
+                        return True
+                    elif self == ids.get('sign_up_password_id'):
+                        ids.sign_up_password_confirm_id.focus = True
+                        return True
+                    elif self == ids.get('sign_up_password_confirm_id'):
+                        ids.sign_up_name_id.focus = True  # loop
+                        return True
+            elif parent.name == 'login_screen':
+                ids = parent.ids
+                if self == ids.get('sign_in_email_id'):
+                    ids.sign_in_password_id.focus = True
+                    return True
+                elif self == ids.get('sign_in_password_id'):
+                    ids.sign_in_email_id.focus = True
+                    return True
+
+        return super().keyboard_on_key_down(window, keycode, text, modifiers)
 
 
 class SignupScreen(Screen):

@@ -108,8 +108,9 @@
                 font_name : 'barlow-reg'
                 pos_hint :{'right' : 0.15}
                 size_hint : (0.1,0.4)
-            TextInput:
+            ComfortableTextInput:
                 hint_text: "Choi"  #initialize; this is not hard coded name on the screen
+                id : sign_up_name_id
                 font_size: "12sp"
                 font_name :'barlow-reg'
                 pos_hint : {'right': 0.89}
@@ -141,7 +142,7 @@
                 font_name : 'barlow-reg'
                 pos_hint :{'right' : 0.15}
                 size_hint : (0.1,0.4)
-            TextInput:
+            ComfortableTextInput:
                 id : sign_up_email_id
                 hint_text: "choim3419@uwstout.edu"
                 font_size: "12sp"
@@ -176,7 +177,7 @@
                 pos_hint :{'right' : 0.19}
                 size_hint : (0.1,0.4)
 
-            TextInput:
+            ComfortableTextInput:
                 id : sign_up_password_id
                 password : True
                 hint_text: "**************"
@@ -213,7 +214,8 @@
                 pos_hint :{'right' : 0.25}
                 size_hint : (0.1,0.4)
 
-            TextInput:
+            ComfortableTextInput:
+                id : sign_up_password_confirm_id
                 password : True
                 hint_text: "**************"
                 font_size: "12sp"

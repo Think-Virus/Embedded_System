@@ -168,8 +168,25 @@
             Spacer:
                 size_hint : (0.1,0.19)
 #-----------------End of password row----------------------
-        Spacer:
-            size_hint:(1,0.05)
+
+#-----------------Start of Error row----------------------
+        BoxLayout:
+            size_hint: (1,0.2)
+            orientation : "horizontal"
+
+            Label:
+                id : sign_in_error_label_id
+                text : ''
+                font_size :  "13sp"
+                halign : 'left'
+                pos_hint : {'right' : 0.89}
+                markup : True
+                size_hint: (0.6,1)
+                color: 1,0,0,1
+            Spacer:
+                size_hint:(0.2,1)
+#-----------------End of Error row----------------------
+
 #-----------------Start of last row----------------------
 
         BoxLayout:
@@ -186,7 +203,7 @@
                 font_size : "12sp"
                 font_name : 'barlow-reg'
                 on_release:
-                    #process log in
+                    app.process_sign_in()
             LabelButton:
                 text: "Not a member ? [u]Register here[/u]"
                 color : 0.4039,0.4156,0.545,1

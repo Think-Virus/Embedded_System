@@ -134,6 +134,41 @@ class MainApp(App):
         LabelBase.register(name='roboto-medium', fn_regular='fonts/Roboto-Medium.ttf')
         LabelBase.register(name='roboto-thin', fn_regular='fonts/Roboto-Thin.ttf')
 
+    def process_sign_in(self):
+        self.sign_in(self.root.ids['login_screen'].ids['sign_in_email_id'].text, self.root.ids['login_screen'].ids['sign_in_password_id'].text)
+
+    def sign_in(self, email, password):
+        # Input validation
+        if not email or not password:
+            self.root.ids['login_screen'].ids['sign_in_error_label_id'].text = "Please enter both email and password"
+            return
+
+        # Firebase login endpoint
+        login_url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + self.wak
+        login_payload = {
+            "email": email,
+            "password": password,
+            "returnSecureToken": True
+        }
+
+        login_request = requests.post(login_url, data=login_payload)
+        login_data = json.loads(login_request.content.decode('utf-8'))
+
+        if not login_request.ok:
+            error_message = login_data.get('error', {}).get('message', 'Login failed')
+            self.root.ids['login_screen'].ids['sign_in_error_label_id'].text = error_message
+            return
+
+        # Login success
+        refresh_token = login_data['refreshToken']
+        self.local_id = login_data['localId']
+        self.id_token = login_data['idToken']
+
+        print("Login successful")
+        print("Local ID:", self.local_id)
+
+        self.process_dashboard()
+
     def process_sign_up(self):
         self.sign_up(self.root.ids['signup_screen'].ids['sign_up_email_id'].text, self.root.ids['signup_screen'].ids['sign_up_password_id'].text)
 
@@ -151,9 +186,8 @@ class MainApp(App):
 
         sign_up_data = json.loads(sign_up_request.content.decode('utf-8'))
         if not sign_up_request.ok:
-            error_data = json.loads(sign_up_request.content.decode('utf-8'))
-            error_message = error_data['error']['message']
-            self.root.ids['signup_screen'].ids['error_label_id'].text = error_message
+            error_message = sign_up_data['error']['message']
+            self.root.ids['signup_screen'].ids['sign_up_error_label_id'].text = error_message
         else:
             realtime_database_url = "https://iotdashboard-ffb97-default-rtdb.firebaseio.com/"
 
@@ -175,7 +209,7 @@ class MainApp(App):
         password = signup_ids['sign_up_password_id'].text.strip()
         confirm_password = signup_ids['sign_up_password_confirm_id'].text.strip()
         checkbox = signup_ids['terms_n_conditions_cb_id']
-        error_label = signup_ids['error_label_id']
+        error_label = signup_ids['sign_up_error_label_id']
 
         # Name validation
         if not name:

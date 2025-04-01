@@ -1,0 +1,219 @@
+#: import utils kivy.utils
+
+<SigninScreen>:
+
+    FloatLayout:
+        canvas:
+            Color:
+                rgba: utils.get_color_from_hex("#d5ddf8")  #0b172e(blue) #ff0000(red)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    ImageButton:
+        id :  minimize_btn_id
+        source:  "icons/minimize.png"
+        size_hint: (None,None)
+        height: "25dp"
+        width: "30dp"
+        # pos :  1115,863 #was 1115, 863  1675, 1140
+        pos_hint: {"right": 0.96, "top": 0.99}
+        on_release: app.minimize()
+
+    ImageButton:
+        id :  close_btn_id
+        source:  "icons/cross.png"
+        size_hint: (None,None)
+        height: "25dp"
+        width: "30dp"
+        # pos :  1160,865 #(this is x (width) and y height) 1160,865 ,1730,1160
+        pos_hint: {"right": 0.99, "top": 0.99}
+        on_release: app.close()
+
+    BoxLayout:
+        orientation  : "vertical"
+        pos_hint:{"right" : 0.5,"top":0.8}
+        size_hint :(None,None)
+        width: "330dp"
+        height : "400dp"
+        canvas:
+            Color:
+                rgba: utils.get_color_from_hex("#ffffff") # light blue; was ("#ffffff")
+            Rectangle:
+                pos: self.pos
+                size:  self.size
+
+        Spacer:
+            size_hint :(1,0.05) #width, height used 5% of height for the spacer
+
+        Label:
+            text: "Real Time System Monitoring for [color=ff0099]Senesors Connected to the NUCLEO[/color]."
+            font_size : "15sp"
+            color:  0.4,0.411,0.5411,1 #RGBand alpha(opacity), 255, 255, 255, 255, r=180 we use 180/255
+            text_size :(300,None)
+            size_hint :(1,0.2)#width, height used 20% of height for the label
+            markup: True
+        Spacer:
+            size_hint:(1,0.05)
+
+        Image:
+            source: "icons/lg.jpg"
+            size_hint:(0.7,0.7)#width,height
+            pos_hint:{"right": 0.85}
+
+    BoxLayout:
+        pos_hint:{"right":0.77,"top":0.8}
+        height:"400dp"
+        width:"330dp"
+        orientation: "vertical"
+        size_hint:(None,None)
+        canvas:
+            Color:
+                rgba:utils.get_color_from_hex("0c1e3c") # blue background
+            Rectangle:
+                size: self.size
+                pos : self.pos
+
+        BoxLayout:
+            size_hint:(1,0.1)
+            orientation: "horizontal"
+            Spacer:
+                size_hint:(0.5,0.7)#0.5 is width of a blank space
+            Button:
+                size_hint: (0.15,0.5)
+                text: "SIGN IN"
+                font_size: "12sp"
+                font_name : 'barlow-reg'
+                background_normal : ''
+                background_color : 0.0039,0.4392,0.984,1
+                on_release:
+                    # sign in
+            Button:
+                size_hint: (0.15,0.5)
+                text: "SIGN UP"
+                font_size: "12sp"
+                font_name : 'barlow-reg'
+                background_normal : ''
+                background_color : 0.027,0.180,0.380,1
+                on_release: app.process_move2signup()
+            Spacer:
+                size_hint:(0.2,1)
+
+#-----------------Start of email row----------------------
+        BoxLayout:
+            size_hint : (1,0.15)
+            orientation: "vertical"
+            Label:
+                text: "EMAIL"
+                font_size : "12sp"
+                font_name : 'barlow-reg'
+                pos_hint :{'right' : 0.15}
+                size_hint : (0.1,0.4)
+            ComfortableTextInput:
+                id : sign_in_email_id
+                hint_text: "choim3419@uwstout.edu"
+                font_size: "12sp"
+                font_name :'barlow-reg'
+                pos_hint : {'right': 0.89}
+                size_hint: (0.85,0.4)
+                background_color : 0,0,0,0
+                foreground_color: 0.8,0.8,0.8,1
+
+            Separator:
+                width : "240dp"
+                size_hint : (0.85,0.01)
+                pos_hint : {'right': 0.91}
+                canvas:
+                    Color:
+                        rgba: utils.get_color_from_hex("#2a2f44")
+                    Rectangle:
+                        size : self.size
+                        pos : self.pos
+            Spacer:
+                size_hint : (0.1,0.19)
+#-----------------End of email row----------------------
+
+#-----------------Start of password row----------------------
+        BoxLayout:
+            size_hint : (1,0.15)
+            orientation: "vertical"
+            Label:
+                text: "PASSWORD"
+                font_size : "12sp"
+                font_name : 'barlow-reg'
+                pos_hint :{'right' : 0.19}
+                size_hint : (0.1,0.4)
+
+            ComfortableTextInput:
+                id : sign_in_password_id
+                password : True
+                hint_text: "**************"
+                font_size: "12sp"
+                font_name :'barlow-reg'
+                pos_hint : {'right': 0.89}
+                size_hint: (0.85,0.4)
+                background_color : 0,0,0,0
+                foreground_color: 0.8,0.8,0.8,1
+
+            Separator:
+                width : "240dp"
+                size_hint : (0.85,0.01)
+                pos_hint : {'right': 0.91}
+                canvas:
+                    Color:
+                        rgba: utils.get_color_from_hex("#2a2f44")
+                    Rectangle:
+                        size : self.size
+                        pos : self.pos
+            Spacer:
+                size_hint : (0.1,0.19)
+#-----------------End of password row----------------------
+
+#-----------------Start of Error row----------------------
+        BoxLayout:
+            size_hint: (1,0.2)
+            orientation : "horizontal"
+
+            Label:
+                id : sign_in_error_label_id
+                text : ''
+                font_size :  "13sp"
+                halign : 'left'
+                pos_hint : {'right' : 0.89}
+                markup : True
+                size_hint: (0.6,1)
+                color: 1,0,0,1
+            Spacer:
+                size_hint:(0.2,1)
+#-----------------End of Error row----------------------
+
+#-----------------Start of last row----------------------
+
+        BoxLayout:
+            size_hint : (1,0.12)
+            orientation: "horizontal"
+            Label:
+                text:""
+                size_hint: (0.05,1)
+            Button:
+                size_hint : (0.25,0.6)
+                background_normal :''
+                background_color : 0.0039,0.4392,0.984,1
+                text: "SIGN IN"
+                font_size : "12sp"
+                font_name : 'barlow-reg'
+                on_release:
+                    app.process_sign_in()
+            LabelButton:
+                text: "Not a member ? [u]Register here[/u]"
+                color : 0.4039,0.4156,0.545,1
+                markup: True
+                font_size : "13sp"
+                size_hint : (0.7,0.5)
+                on_release: app.process_move2signup()
+
+
+#-----------------End of last row----------------------
+
+        Spacer:
+            size_hint:(1,0.08)
